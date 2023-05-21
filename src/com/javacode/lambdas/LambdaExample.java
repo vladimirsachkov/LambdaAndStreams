@@ -48,6 +48,16 @@ public class LambdaExample {
         System.out.println(stringUtils.transform(s, String::toUpperCase));
         System.out.println(stringUtils.transform(s, String::new));
 
+        LambdaScopeTest scope = new LambdaScopeTest();
+        LambdaScopeTest.LambdaScopeInner inner = scope.new LambdaScopeInner();
+
+        inner.TestScope(9999.0000);
+
+        Double d2 = 92.2;
+        int i2 = 2;
+
+        System.out.println(d2 * 2);
+
     }
 
     private static <T extends Number> void processElements(List<T> intList, ElementProcessor function) {
