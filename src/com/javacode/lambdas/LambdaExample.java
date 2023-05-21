@@ -1,9 +1,6 @@
 package com.javacode.lambdas;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @FunctionalInterface
 interface ElementProcessor<T extends Number> {
@@ -35,7 +32,22 @@ public class LambdaExample {
         processElements(doubleList, (x)->Math.sin(x.doubleValue()));
 
         TimeUntil.measure(()->Arrays.sort(createRandomArray()));
-//       TimeUntil.measure(Arrays.sort(a));
+
+        String s = "Hello ";
+        Double d = 0.123;
+
+        TransformUtils<Double> doubleUtils = new TransformUtils<>();
+        System.out.println(doubleUtils.transform(d, x->Math.sin(x)));
+
+        TransformUtils<String> stringUtils = new TransformUtils<>();
+        System.out.println(stringUtils.transform(s, TransformUtils::exclaim));
+
+        String suffix = "Alex";
+        System.out.println(stringUtils.transform(suffix, s::concat));
+
+        System.out.println(stringUtils.transform(s, String::toUpperCase));
+        System.out.println(stringUtils.transform(s, String::new));
+
     }
 
     private static <T extends Number> void processElements(List<T> intList, ElementProcessor function) {
