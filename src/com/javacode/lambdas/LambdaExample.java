@@ -1,5 +1,7 @@
 package com.javacode.lambdas;
 
+import com.javacode.lambdas.model.Circle;
+
 import java.util.*;
 
 @FunctionalInterface
@@ -10,6 +12,25 @@ interface ElementProcessor<T extends Number> {
 @FunctionalInterface
 interface ExecutiveFunction{
     void process();
+}
+
+@FunctionalInterface
+interface Operation {
+    void process();
+
+    static void measure(Operation function) {
+        long start = System.currentTimeMillis();
+        function.process();
+        long end = System.currentTimeMillis();
+        System.out.println("Time spent "+(end-start));
+    }
+
+    default Operation combineOperation(Operation that){
+        return ()->{
+            process();
+            that.process();
+        };
+    }
 }
 
 public class LambdaExample {
@@ -28,11 +49,20 @@ public class LambdaExample {
         doubleList.add(4.13);
         doubleList.add(12.2);
 
-        processElements(intList, (x)->Math.sin(x.doubleValue()));
-        processElements(doubleList, (x)->Math.sin(x.doubleValue()));
+//        processElements(intList, (x)->Math.sin(x.doubleValue()));
+//        processElements(doubleList, (x)->Math.sin(x.doubleValue()));
 
-        TimeUntil.measure(()->Arrays.sort(createRandomArray()));
+        Operation operation1 = () -> Arrays.sort(createRandomArray());
+        Operation operation2 = () -> Arrays.sort(createRandomArray());
+        Operation.measure(operation1.combineOperation(operation2));
 
+        Circle circle = new Circle();
+        System.out.println(circle.calcSomething());
+
+//        processStrings();
+    }
+
+    private static void processStrings(){
         String s = "Hello ";
         Double d = 0.123;
 
@@ -57,7 +87,6 @@ public class LambdaExample {
         int i2 = 2;
 
         System.out.println(d2 * 2);
-
     }
 
     private static <T extends Number> void processElements(List<T> intList, ElementProcessor function) {
@@ -79,15 +108,5 @@ public class LambdaExample {
             myArray[i] = r.nextInt(myArray.length);
         }
         return myArray;
-    }
-
-    public static class TimeUntil{
-
-        private static void measure(ExecutiveFunction function) {
-            long start = System.currentTimeMillis();
-            function.process();
-            long end = System.currentTimeMillis();
-            System.out.println("Time spent "+(end-start));
-        }
     }
 }
